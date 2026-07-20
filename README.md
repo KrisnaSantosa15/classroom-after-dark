@@ -1,129 +1,69 @@
 # Classroom After Dark
 
-> **Practice tomorrow’s lesson before a real learner loses confidence.**
+> **One teaching knot. Three perspectives. One clear next move.**
 
-Classroom After Dark is a private lesson-rehearsal studio for teachers. An educator selects fictional learning signals, tries an instructional move at a pivotal lesson moment, branches from the same moment to test another move, and carries the chosen supports into an editable **Teach Tomorrow** pack.
+Classroom After Dark is a focused planning room for teachers. Bring the lesson moment that is not landing, convene an **Evidence**, **Access**, and **Momentum** lens, and leave with a concrete 3–15 minute opener to try tomorrow.
 
-It is a teacher planning tool—not a learner profile, assessment system, prediction engine, or AI tutor.
+It is deliberately not a learner-profile system, prediction engine, or generic chat dashboard. There are no fictional students, no scores, and no maze of settings—just a useful conversation about the teaching decision in front of you.
 
-## Why it exists
+## Try it
 
-A lesson can look sound on paper and still meet a misconception, language barrier, or participation bottleneck in the first few minutes. Classroom After Dark gives the teacher a private place to rehearse that moment before class.
-
-The hero lesson is a Grade 5 fractions discussion: one fictional signal treats a larger denominator as a larger amount; another needs the vocabulary and response route made visible. The teacher first tries a quick explanation, branches from the exact same moment, then tries fraction strips, pair talk, and a contrastive proof prompt. The difference is concrete, explained, and usable tomorrow morning.
-
-## What works today
-
-- Edit a lesson objective, grade band, and timing before rehearsal.
-- Choose 3–5 editable **fictional learning signals**; add a custom, teaching-relevant signal with privacy safeguards.
-- Run a deterministic rehearsal with suggested or teacher-authored instructional moves.
-- See every state change through named, inspectable rules—never an opaque learner score.
-- Persist the full lesson, signal deck, routes, comparison, reflection, and optional coach draft privately in the browser.
-- Branch from the same teaching moment, compare Route A and Route B, then commit the preferred supports.
-- Generate, preview, copy, and download an editable Markdown Teach Tomorrow pack.
-- Optionally ask a GPT-5.6 Narrative Coach for short, teacher-editable language drafts. The core app is complete without an API key.
-
-## Quick start
-
-Prerequisites: Node.js 20 or newer.
+Prerequisite: Node.js 20 or newer.
 
 ```powershell
-cd classroom-after-dark
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000), then choose **Rehearse the fractions lesson**.
+Open [http://localhost:3000](http://localhost:3000). Type a real, de-identified teaching topic and select **Convene the council**. The product works immediately with local planning lenses; no account, database, or API key is required.
 
-### Golden path for a judge
+### Judge path
 
-1. Open the fractions fixture and review the objective.
-2. Keep the four selected fictional signals, then start rehearsal.
-3. Choose **Explain it again**.
-4. Select **Branch from this moment**.
-5. Choose **Show, pair, then prove**.
-6. Compare both routes, commit Route B, and download the Teach Tomorrow pack.
+1. Open the app and enter a lesson moment, such as: `Grade 8 learners can calculate slope but struggle to explain what the sign means on a graph.`
+2. Select **Convene the council**.
+3. Read the three short perspectives, then open **Hear the debate** to see the useful tension between them.
+4. Copy **Tomorrow's first move** and adapt it for class.
 
-The path requires no account, database, model key, or external classroom data.
+## What it does
 
-## Optional GPT-5.6 Narrative Coach
+- Transforms one open-ended teaching dilemma into three complementary perspectives.
+- Makes disagreement productive: Evidence, Access, and Momentum challenge the plan before converging.
+- Delivers one action card with a time-box, teacher language, and evidence to notice.
+- Keeps the interaction one-click and low cognitive-load.
+- Saves the last council locally in the browser, so teachers can come back to it.
+- Rejects names, contact details, diagnostic labels, and plan references before any model request.
 
-Copy `.env.example` to `.env.local`, then add a standard OpenAI Platform key:
+## GPT-5.6: tailored councils with a safe fallback
+
+The local council is a complete, deterministic planning experience. When an OpenAI key is configured, the server replaces it with a tailored GPT-5.6 council using the teacher's de-identified topic.
 
 ```dotenv
+# .env.local
 OPENAI_API_KEY=your_key_here
 OPENAI_MODEL=gpt-5.6-terra
 ```
 
-The integration uses the Responses API and strict JSON schema output. `gpt-5.6-terra` is the default because this is a concise, latency-sensitive wording task; set `OPENAI_MODEL=gpt-5.6` to use the flagship alias if desired. [Current model guidance](https://developers.openai.com/api/docs/guides/latest-model) recommends the GPT-5.6 family and the Responses API for these workflows.
+The `/api/council` route uses the Responses API and strict JSON Schema output. It validates the topic before sending it, validates the returned Evidence/Access/Momentum cards, debate, and recommendation before displaying them, and falls back cleanly when a key is absent. The model is asked for a move to try—not a promise, learner judgment, diagnosis, or prediction.
 
-The coach may draft one fictional evidence line, a teacher-move title, teacher wording, and a trade-off. It cannot:
+## Built with Codex and GPT-5.6
 
-- receive personal learner data, contact information, support plans, or diagnoses;
-- calculate rehearsal metrics, time, state changes, or branch comparisons;
-- predict, rank, diagnose, or label a real learner;
-- make the teacher’s decision or silently alter the plan.
+Codex with GPT-5.6 was used to reshape the project from an overlong fictional rehearsal into a production-focused Teaching Council: the interaction model, typed contract, local fallback, structured model route, accessible interface, automated checks, and narrated product showcase.
 
-The server validates both the submitted rehearsal brief and returned model draft. If the key is absent or the request fails, the deterministic rehearsal keeps working unchanged.
+Inside the product, GPT-5.6 creates concise, structured perspectives from the teacher's own topic. The application keeps control of privacy checks, response validation, display, and the immediately usable action-card format.
 
-## How the rehearsal stays explainable
+## Stack
 
-The application separates language from consequences:
-
-```text
-Teacher move + declared supports
-        ↓
-Pure typed rule engine
-        ↓
-Objective evidence · participation access · representation access · language access · time
-        ↓
-Named rule trace + Teach Tomorrow pack
-```
-
-For example, **Show, pair, then prove** selects a representation, a low-pressure response route, a language support, and a reasoning check. The reducer applies `visual-contrast-for-part-whole-confusion` and `response-route-before-whole-class-share`; it does not infer a score from model prose.
-
-## Privacy and product boundaries
-
-- The first release is deliberately local-first: rehearsal data is stored in this browser’s local storage, and can be cleared with **Fresh room**.
-- The app calls no external service unless the teacher explicitly configures the optional Narrative Coach.
-- Signal cards are fictional, editable teaching conditions. The custom-signal form rejects common contact-information and diagnostic / support-plan terms.
-- Classroom After Dark does not ingest student records, infer a diagnosis, make a behavioral prediction, or replace professional educator judgment.
-- The simulation is a planning rehearsal, not a claim about what a real class will do.
-
-## Architecture
-
-```text
-Next.js + React client studio
-  ├─ local-first persisted workspace
-  ├─ typed lesson / signal / move domain
-  ├─ deterministic branchable rehearsal reducer
-  ├─ Markdown Teach Tomorrow artifact generator
-  └─ optional server-side GPT-5.6 Narrative Coach
-       └─ minimized JSON brief → strict structured draft → teacher review
-```
-
-The local-first persistence keeps this hackathon release private, zero-setup, and testable on a clean machine. Its domain and storage boundary are intentionally small enough to add a hosted workspace adapter later without changing the simulation rules.
+Next.js · React · TypeScript · Zod · OpenAI Responses API · GPT-5.6 · Playwright · Remotion
 
 ## Verification
 
 ```powershell
+npm run lint
 npm run typecheck
 npm test
 npm run build
 npm run test:e2e
 ```
-
-The test suite covers the deterministic move rules, teacher-authored support mapping, export content, and the complete browser journey from fixture to Teach Tomorrow pack.
-
-## Built with Codex and GPT-5.6
-
-Codex with GPT-5.6 was used to develop the product architecture, typed rehearsal engine, state tests, high-fidelity teaching-studio interface, safety boundary, model adapter, build verification, browser automation, and submission material.
-
-Within the product, GPT-5.6 is intentionally constrained to the task where generative language is valuable: drafting brief, editable fictional evidence and teacher wording from a minimized lesson context. The teacher and deterministic rule engine remain in control of every instructional consequence.
-
-## Demo narrative
-
-“A teacher is preparing a Grade 5 fractions lesson. The plan is fine on paper, but a common misconception—larger denominator, larger amount—will appear in the first guided-practice turn. Classroom After Dark lets the teacher rehearse privately with fictional learning signals. A quick verbal explanation names the misconception but leaves evidence and participation narrow. From the exact same moment, the teacher branches, uses fraction strips plus paired pointing and proof, then sees the precise trade-off: two more minutes for a visible concept and a broader response route. The outcome is an editable plan to teach tomorrow—not a prediction about a child.”
 
 ## License
 
