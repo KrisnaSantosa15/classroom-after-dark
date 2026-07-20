@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Classroom After Dark — rehearse tomorrow's lesson",
-  description: "A private, fictional lesson-rehearsal studio for teachers.",
+  title: "Classroom After Dark — Teaching Council",
+  description: "Three teaching lenses and one practical next move for any classroom topic.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

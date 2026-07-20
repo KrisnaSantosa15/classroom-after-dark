@@ -1,19 +1,13 @@
 import { expect, test } from "@playwright/test";
 
-test("teacher can rehearse, branch, compare, and create a Teach Tomorrow pack", async ({ page }) => {
+test("teacher can convene a topic and receive an interactive next move", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Rehearse the fractions lesson" }).click();
-  await page.getByRole("button", { name: "Open the signal deck" }).click();
-  await page.getByRole("button", { name: "Dim the room. Start rehearsal" }).click();
+  await page.getByLabel("What are you teaching or trying to solve?").fill("My seminar gets quiet after one student answers. How can I draw out better contributions?");
+  await page.getByRole("button", { name: "Convene the room" }).click();
 
-  await page.getByRole("button", { name: /Explain it again/ }).click();
-  await expect(page.getByText("Why the rehearsal shifted")).toBeVisible();
-  await page.getByRole("button", { name: "Branch from this moment" }).click();
-  await page.getByRole("button", { name: /Show, pair, then prove/ }).click();
-  await expect(page.getByRole("heading", { name: /Keep the move that/ })).toBeVisible();
-
-  await expect(page.locator(".route-card--branch").getByRole("button", { name: "This is the route to keep" })).toBeVisible();
-  await page.getByRole("button", { name: /Commit this into tomorrow/ }).click();
-  await expect(page.getByRole("heading", { name: /Teach Tomorrow/ })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Show, pair, then prove" })).toBeVisible();
+  await expect(page.getByText("The question in the room")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Open with a quiet first answer" })).toBeVisible();
+  await page.getByRole("button", { name: "Let the lenses challenge each other" }).click();
+  await expect(page.getByText("Energy is not enough.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy plan" })).toBeVisible();
 });
